@@ -2,15 +2,14 @@
 
 include(camera_propheseeTaskLib)
 
-
 ADD_LIBRARY(${CAMERA_PROPHESEE_TASKLIB_NAME} SHARED 
     ${CAMERA_PROPHESEE_TASKLIB_SOURCES})
 add_dependencies(${CAMERA_PROPHESEE_TASKLIB_NAME}
     regen-typekit)
 
 include_directories(${PROPHESEE_DRIVER_INCLUDE_DIRS})
-include_directories(${Boost_INCLUDE_DIRS})
 include_directories("/usr/include/prophesee_core/")
+include_directories(${Boost_INCLUDE_DIRS})
 
 TARGET_LINK_LIBRARIES(${CAMERA_PROPHESEE_TASKLIB_NAME}
     ${Boost_LIBRARIES}
