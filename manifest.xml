@@ -1,0 +1,19 @@
+<package>
+  <description brief="The ATIS prophesee camera driver">
+  The event camera ATIS from the Prophesee manufacturer
+  </description>
+  <author>Javier Hidalgo-Carrio/jhidalgocarrio@ifi.uzh.ch</author>
+  <license></license>
+  <url>http://</url>
+  <logo>http://</logo>
+  <depend package="base/cmake" />
+  <!--
+   To add any dependencies use the depend tag
+  <depend package="dummy-dependency-0" />
+	...
+  <depend package="dummy-dependency-n-1" />
+  <depend package="dummy-dependency-n" />
+  -->
+  <depend package="base/types" />
+  <depend package="perception/frame_helper" />
+</package>
