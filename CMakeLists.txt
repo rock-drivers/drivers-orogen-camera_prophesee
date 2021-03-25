@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 
 # Currently the prophesee driver does not have a pkg-config file
 find_package(prophesee_driver REQUIRED)
+find_package(prophesee_core REQUIRED)
 
 # The Prophesee driver uses Boost and since we don't cretae a wrapper we need to
 # link against boost libraries in the orogen component
