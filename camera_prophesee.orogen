@@ -31,8 +31,8 @@ task_context "Task" do
     #***************************
     property "biases_file", "/std/string"
         doc "File with the user defined sensor biases"
-    property "max_event_rate", "double"
-        doc "Maximum number of events per second"
+    property "max_event_rate", "double", 10000
+        doc "Maximum number of events per second (default value writen here)"
 
     #***************************
     #**** Camera Calibration ****

@@ -35,6 +35,7 @@ namespace camera_prophesee{
 
     /** Driver variables **/
     Prophesee::Camera camera; /** The ATIS Prophesee camera **/
+    std::vector<Prophesee::EventCD> events_queue;
 
     /** Output port variables **/
 
