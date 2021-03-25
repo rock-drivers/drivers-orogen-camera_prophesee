@@ -1,0 +1,25 @@
+--- name:default
+# ***************************
+# **** Driver Properties ****
+# ***************************
+biases_file: ''
+# no documentation available for this property
+max_event_rate: 10000.0
+
+--- name:prophesee_yellow_dot
+# Camera intrinsic parameters.
+camera_parameters:
+  fx: .nan
+  fy: .nan
+  cx: .nan
+  cy: .nan
+  d0: .nan
+  d1: .nan
+  d2: .nan
+  d3: .nan
+  width: -1
+  height: -1
+  ex: .nan
+  ey: .nan
+  fisheye: false
+
