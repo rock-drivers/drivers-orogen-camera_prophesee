@@ -8,8 +8,8 @@ Orocos.initialize
 
 Orocos::Process.run 'camera_prophesee::Task' => 'camera_prophesee' do
     # log all the output ports
-    Orocos.log_all_ports 
-    Orocos.conf.load_dir('.')
+    #Orocos.log_all_ports 
+    Orocos.conf.load_dir('../config')
 
     # Get the task
     driver = Orocos.name_service.get 'camera_prophesee'

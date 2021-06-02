@@ -12,23 +12,6 @@
 
 namespace camera_prophesee
 {
-    struct Event
-    {
-        unsigned int x;
-        unsigned int y;
-        ::base::Time ts;
-        bool polarity;
-    };
-
-    struct EventArray
-    {
-        ::base::Time time;
-        unsigned int height;
-        unsigned int width;
-
-        std::vector<Event> events;
-    };
-
 
 }
 

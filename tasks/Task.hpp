@@ -3,11 +3,20 @@
 #ifndef CAMERA_PROPHESEE_TASK_TASK_HPP
 #define CAMERA_PROPHESEE_TASK_TASK_HPP
 
-#include "camera_prophesee/TaskBase.hpp"
-
 /** Prophesee system driver **/
 #include <prophesee_driver/prophesee_driver.h>
+#include <prophesee_core/algos/core/activity_noise_filter_algorithm.h>
 
+/** Base types **/
+#include <base/samples/IMUSensors.hpp>
+#include <base/samples/Frame.hpp>
+#include <base/samples/EventArray.hpp>
+
+/** Frame helper **/
+#include <frame_helper/FrameHelper.h>
+
+/** Task Base **/
+#include "camera_prophesee/TaskBase.hpp"
 
 namespace camera_prophesee{
 
@@ -29,15 +38,33 @@ namespace camera_prophesee{
     {
     friend class TaskBase;
     protected:
+        /** Control variables **/
+        bool camera_is_opened;
 
-    /** Control variables **/
-    bool camera_is_opened;
+        /** Mean gravity value at Earth surface [m/s^2] **/
+        static constexpr float GRAVITY = 9.81;
 
-    /** Driver variables **/
-    Prophesee::Camera camera; /** The ATIS Prophesee camera **/
-    std::vector<Prophesee::EventCD> events_queue;
+        /** Time of cd events fixed by Prophesee driver
+        The delta time is set to a fixed number of 64 microseconds (1e-06)
+        **/
+        static constexpr double EVENT_DEFAULT_DELTA_T = 6.4e-05;
 
-    /** Output port variables **/
+        /** Driver variables **/
+        Prophesee::Camera camera; /** The ATIS Prophesee camera **/
+        std::vector<Prophesee::EventCD> event_buffer;
+
+        /** Activity Filter Instance **/
+        std::shared_ptr<Prophesee::ActivityNoiseFilterAlgorithm<>> activity_filter;
+
+
+        /**  Event buffer time stamps **/
+        ::base::Time start_timestamp, event_delta_t;
+        ::base::Time event_buffer_start_time, event_buffer_current_time;
+
+
+        /** Output port variables **/
+        ::base::samples::EventArray event_msg;
+        RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> frame;
 
     public:
         /** TaskContext constructor for Task
@@ -107,6 +134,10 @@ namespace camera_prophesee{
          * before calling start() again.
          */
         void cleanupHook();
+
+        void eventsCallBack();
+
+        void imuCallBack();
     };
 }
 
