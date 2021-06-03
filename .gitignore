@@ -1,5 +1,7 @@
 templates/*
 .orogen/*
+.vscode
+compile_commands.json
 *~
 .*.swp
 build/*
