@@ -199,7 +199,7 @@ void Task::eventsCallBack()
 
 
                 // Publish the message
-                //this->_events.write(event_msg);
+                this->_events.write(event_msg);
             }
         });
 
@@ -223,7 +223,7 @@ void Task::imuCallBack()
             imusamples.time = this->start_timestamp + ::base::Time::fromMicroseconds(it->t * 1.0);
             imusamples.acc << GRAVITY * it->ax, GRAVITY * it->ay, GRAVITY * it->az; //[m/s^2]
             imusamples.gyro << it->gx, it->gy, it->gz; //[rad/s]
-            //this->_imu.write(imusamples);
+            this->_imu.write(imusamples);
         }
     });
 }
