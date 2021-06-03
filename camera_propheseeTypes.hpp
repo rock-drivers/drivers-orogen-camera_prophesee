@@ -12,7 +12,8 @@
 
 namespace camera_prophesee
 {
-
+    /** Color encodeing: first color positive event, seconds color negative event **/
+    enum COLOR_ENCODING{BLUE_RED, GREEN_RED, BLUE_BLACK};
 }
 
 #endif

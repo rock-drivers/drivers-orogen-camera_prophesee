@@ -1,76 +1,51 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
-#ifndef CAMERA_PROPHESEE_TASK_TASK_HPP
-#define CAMERA_PROPHESEE_TASK_TASK_HPP
+#ifndef CAMERA_PROPHESEE_FRAMEGENERATOR_TASK_HPP
+#define CAMERA_PROPHESEE_FRAMEGENERATOR_TASK_HPP
 
-/** Prophesee system driver **/
-#include <prophesee_driver/prophesee_driver.h>
-#include <prophesee_core/algos/core/activity_noise_filter_algorithm.h>
+#include <base/samples/Frame.hpp>
 
-/** Base types **/
-#include <base/samples/IMUSensors.hpp>
-#include <base/samples/EventArray.hpp>
+/** Frame helper **/
+#include <frame_helper/FrameHelper.h>
 
-/** Task Base **/
-#include "camera_prophesee/TaskBase.hpp"
+#include "camera_prophesee/FrameGeneratorBase.hpp"
 
 namespace camera_prophesee{
 
-    /*! \class Task
+    /*! \class FrameGenerator
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
      * Essential interfaces are operations, data flow ports and properties. These interfaces have been defined using the oroGen specification.
      * In order to modify the interfaces you should (re)use oroGen and rely on the associated workflow.
-     * Maximum number of events per second
+     * Color encoding: red-blue, green_red, blue_black
      * \details
      * The name of a TaskContext is primarily defined via:
      \verbatim
      deployment 'deployment_name'
-         task('custom_task_name','camera_prophesee::Task')
+         task('custom_task_name','camera_prophesee::FrameGenerator')
      end
      \endverbatim
      *  It can be dynamically adapted when the deployment is called with a prefix argument.
      */
-    class Task : public TaskBase
+    class FrameGenerator : public FrameGeneratorBase
     {
-    friend class TaskBase;
+	friend class FrameGeneratorBase;
     protected:
-        /** Control variables **/
-        bool camera_is_opened;
-
-        /** Mean gravity value at Earth surface [m/s^2] **/
-        static constexpr float GRAVITY = 9.81;
-
-        /** Time of cd events fixed by Prophesee driver
-        The delta time is set to a fixed number of 64 microseconds (1e-06)
-        **/
-        static constexpr int64_t EVENT_DEFAULT_DELTA_T_MICROSECONDS = 64;
-
-        /** Driver variables **/
-        Prophesee::Camera camera; /** The ATIS Prophesee camera **/
-        std::vector<Prophesee::EventCD> event_buffer;
-
-        /** Activity Filter Instance **/
-        std::shared_ptr<Prophesee::ActivityNoiseFilterAlgorithm<>> activity_filter;
-
-
-        /**  Event buffer time stamps **/
-        ::base::Time start_timestamp, event_delta_t;
-        ::base::Time event_buffer_start_time, event_buffer_current_time;
-
-
         /** Output port variables **/
-        ::base::samples::EventArray event_msg;
+        RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> events_frame_msg;
+
+        /** Create the frame method **/
+        cv::Mat createFrame (::base::samples::EventArray &events_array);
 
     public:
-        /** TaskContext constructor for Task
+        /** TaskContext constructor for FrameGenerator
          * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.
          * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
          */
-        Task(std::string const& name = "camera_prophesee::Task");
+        FrameGenerator(std::string const& name = "camera_prophesee::FrameGenerator");
 
-        /** Default deconstructor of Task
+        /** Default deconstructor of FrameGenerator
          */
-        ~Task();
+	    ~FrameGenerator();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -129,10 +104,6 @@ namespace camera_prophesee{
          * before calling start() again.
          */
         void cleanupHook();
-
-        void eventsCallBack();
-
-        void imuCallBack();
     };
 }
 

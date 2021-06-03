@@ -33,6 +33,7 @@ bool Task::configureHook()
         /** Configure the camera **/
         if (!_biases_file.value().empty())
         {
+            std::cout<<"bias file: "<<_biases_file.value()<<std::endl;
             this->camera.biases().set_from_file(_biases_file.value());
         }
         this->camera_is_opened = true;
@@ -68,23 +69,22 @@ bool Task::configureHook()
         /** Read the current stream rate of events **/
         if (this->_event_streaming_rate > 0)
         {
-            this->event_delta_t.fromSeconds(1.0/ this->_event_streaming_rate);
+            this->event_delta_t = ::base::Time::fromSeconds(1.0/ this->_event_streaming_rate);
         }
         else
         {
-            this->event_delta_t.fromSeconds(EVENT_DEFAULT_DELTA_T);
-            this->_event_streaming_rate = 1.0 / this->event_delta_t.toSeconds();
+            this->event_delta_t = ::base::Time::fromMicroseconds(EVENT_DEFAULT_DELTA_T_MICROSECONDS);
+            this->_event_streaming_rate.set(1.0 / this->event_delta_t.toSeconds());
         }
 
         // Add runtime error callback
-        camera.add_runtime_error_callback([](const Prophesee::CameraException &e)
-        {
+        camera.add_runtime_error_callback([](const Prophesee::CameraException &e){
             RTT::log(RTT::Info)<< e.what() << RTT::endlog();
         });
 
         if (this->_activity_filter_temporal_depth > 0)
         {
-            this->activity_filter.reset(new Prophesee::ActivityNoiseFilterAlgorithm<>(camera.geometry().width(), camera.geometry().height(), this->_activity_filter_temporal_depth));
+            this->activity_filter.reset(new Prophesee::ActivityNoiseFilterAlgorithm<>(camera.geometry().width(), camera.geometry().height(), this->_activity_filter_temporal_depth.value()));
         }
 
     }
@@ -199,7 +199,7 @@ void Task::eventsCallBack()
 
 
                 // Publish the message
-                this->_events.write(event_msg);
+                //this->_events.write(event_msg);
             }
         });
 
@@ -223,7 +223,7 @@ void Task::imuCallBack()
             imusamples.time = this->start_timestamp + ::base::Time::fromMicroseconds(it->t * 1.0);
             imusamples.acc << GRAVITY * it->ax, GRAVITY * it->ay, GRAVITY * it->az; //[m/s^2]
             imusamples.gyro << it->gx, it->gy, it->gz; //[rad/s]
-            this->_imu.write(imusamples);
+            //this->_imu.write(imusamples);
         }
     });
 }
