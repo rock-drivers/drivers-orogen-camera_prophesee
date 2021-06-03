@@ -31,8 +31,8 @@ task_context "Task" do
     #***************************
     property "biases_file", "/std/string"
         doc "File with the user defined sensor biases"
-    property "max_event_rate", "int", 10000
-        doc "Maximum event rate in kEv/s. With 0 does not set any limit"
+    property "max_event_rate", "int", 0
+        doc "Maximum event rate in kEv/s. With 0 does not set any limit in the SDK Prophesee driver"
     property "event_streaming_rate", "int", 0
         doc "Streaming rate in Hz for the events array. By default is 64 microseconds or max 100 events in array"
     property "graylevel_frame_rate", "int", 0
@@ -40,11 +40,6 @@ task_context "Task" do
     property "activity_filter_temporal_depth", "int", 0
         doc "Activity filter temporal depth in microseconds (us)"
 
-    #***************************
-    #**** Camera Calibration ****
-    #***************************
-    property("camera_parameters", 'frame_helper/CameraCalibration').
-        doc 'Camera intrinsic parameters.'
 
     #******************************
     #******* Output Ports *********
@@ -55,9 +50,35 @@ task_context "Task" do
     output_port('events', 'base::samples::EventArray').
         doc 'array of events'
 
-    output_port('frame', ro_ptr('base::samples::frame::Frame')).
-        doc 'Grayscale camera frame.'
-
     fd_driven
 end
 
+
+task_context "FrameGenerator" do
+    needs_configuration
+    #******************************
+    #*******  Property    *********
+    #******************************
+    property "color_encoding", "camera_prophesee::COLOR_ENCODING"
+        doc "Color encoding: RED_BLUE, GREEN_RED, BLUE_BLACK"
+
+    #******************************
+    #******* Input Ports  *********
+    #******************************
+    input_port('events', 'base::samples::EventArray').
+        doc 'array of events'
+
+    #***************************
+    #**** Camera Calibration ***
+    #***************************
+    property("camera_parameters", 'frame_helper/CameraCalibration').
+        doc 'Camera intrinsic parameters.'
+
+    #******************************
+    #******* Output Ports *********
+    #******************************
+    output_port('events_frame', ro_ptr('base::samples::frame::Frame')).
+        doc 'Event frame. One frame per array of events, modify the event_streaming_rate in the Task to change the frame rate'
+
+    port_driven "events"
+end
