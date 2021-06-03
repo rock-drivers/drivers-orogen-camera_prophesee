@@ -9,7 +9,8 @@ Orocos.initialize
 
 Orocos::Process.run 'camera_prophesee::Task' => 'camera_prophesee',
                     'camera_prophesee::FrameGenerator' => 'frame_generator' do
-
+    # log all the output ports
+    Orocos.log_all_ports 
     Orocos.conf.load_dir('../config')
 
     # Get the task
@@ -27,13 +28,9 @@ Orocos::Process.run 'camera_prophesee::Task' => 'camera_prophesee',
     # Connect ports
     driver.events.connect_to generator.events, :type => :buffer, :size => 2
 
-    # log all the output ports
-    Orocos.log_all_ports 
- 
     # Start
     driver.start
     generator.start
-
 
     Vizkit.exec
 end
