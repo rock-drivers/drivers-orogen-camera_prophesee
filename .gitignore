@@ -5,6 +5,7 @@ compile_commands.json
 *~
 .*.swp
 build/*
+scripts/test
 
 *autobuild-stamp
 
