@@ -1,0 +1,9 @@
+% subsystem_ID 2415920130
+% system_ID 21
+1300       %   bias_refr                 %   v    
+-57        %   bias_diff_off             %   v    
+476        %   bias_diff_on              %   v    
+300        %   bias_diff                 %   v    
+1650       %   bias_fo                   %   v    
+1710       %   bias_pr                   %   v    
+1320       %   bias_hpf                  %   v    
