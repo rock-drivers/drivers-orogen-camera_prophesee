@@ -2,9 +2,9 @@
 # ***************************
 # **** Driver Properties ****
 # ***************************
-biases_file: ''
+#biases_file: 'book_duck_cylinder.bias'
 # no documentation available for this property
-event_streaming_rate: 50
+event_streaming_rate: 100
 graylevel_frame_rate: 0
 max_event_rate: 0
 
